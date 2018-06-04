@@ -7,7 +7,7 @@ const config = require ('./config');
 const allowCrossDomain = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Authentication,Content-Type');
+    res.header('Access-Control-Allow-Headers', 'Authorization,Content-Type');
 
     // intercept OPTIONS method
     if ('OPTIONS' == req.method) {
@@ -20,7 +20,7 @@ const allowCrossDomain = (req, res, next) => {
 
 const checkAuthentication = (req, res, next) => {
     // check header or url parameters or post parameters for token
-    const token = req.headers.authentication;
+    const token = req.headers.authorization;
 
     if (!token)
         return res.status(401).send({
