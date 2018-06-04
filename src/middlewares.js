@@ -19,9 +19,8 @@ const allowCrossDomain = (req, res, next) => {
 };
 
 const checkAuthentication = (req, res, next) => {
-
     // check header or url parameters or post parameters for token
-    const token = req.headers['x-access-token'];
+    const token = req.headers.authentication;
 
     if (!token)
         return res.status(401).send({
