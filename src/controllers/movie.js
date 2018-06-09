@@ -1,6 +1,6 @@
 "use strict";
 
-const MovieModel = require('../models/movie');
+const MovieModel = require('../model').Movie;
 
 
 const create = (req, res) => {
