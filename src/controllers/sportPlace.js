@@ -19,7 +19,7 @@ const create = (req, res) => {
 };
 
 const list  = (req, res) => {
-    SportPlaceModel.find({}).exec()
+    SportPlaceModel.find(req.query).exec()
         .then(spotPlaces => res.status(200).json(sportPlaces))
         .catch(error => res.status(500).json({
             error: 'Internal server error',
