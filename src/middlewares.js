@@ -47,6 +47,30 @@ const checkAuthentication = (req, res, next) => {
 
 };
 
+const parseQueryParameters = (req, res, next) => {
+    var parsedQuery = {}
+    for (let key in req.query) {
+        switch(key) {
+            case 'start':
+                //greater than or equal
+                parsedQuery[key] = {$gte: req.query[key]};
+                break;
+            case 'end':
+                //less than or equal
+                parsedQuery[key] = {$lte: req.query[key]};
+                break;
+            default:
+                parsedQuery[key] = req.query[key];
+        }
+    }
+
+    //console.log(req.query);
+    //console.log(parsedQuery);
+
+    req.parsedQuery = parsedQuery;
+    next();
+}
+
 const errorHandler = (err, req, res, next) => {
     if (res.headersSent) {
         return next(err)
@@ -59,5 +83,6 @@ const errorHandler = (err, req, res, next) => {
 module.exports = {
     allowCrossDomain,
     checkAuthentication,
+    parseQueryParameters,
     errorHandler
 };

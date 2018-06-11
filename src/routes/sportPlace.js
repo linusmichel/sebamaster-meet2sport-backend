@@ -6,7 +6,7 @@ const router         = express.Router();
 const middlewares    = require('../middlewares');
 const SportPlaceController = require('../controllers/sportPlace');
 
-router.get('/', middlewares.checkAuthentication, SportPlaceController.list);
-router.post('/', middlewares.checkAuthentication , SportPlaceController.create);
+router.get('/', middlewares.checkAuthentication, middlewares.parseQueryParameters, SportPlaceController.list);
+router.post('/', middlewares.checkAuthentication, SportPlaceController.create);
 
 module.exports = router;
