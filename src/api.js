@@ -8,6 +8,7 @@ const middlewares = require('./middlewares');
 
 const auth  = require('./routes/auth');
 const sportPlace  = require('./routes/sportPlace');
+const event  = require('./routes/event');
 
 const api = express();
 
@@ -81,6 +82,7 @@ api.get('/dummy', (req, res) => {
 // API routes
 api.use('/auth'  , auth);
 api.use('/sportPlace'  , sportPlace);
+api.use('/event'  , event);
 
 
 
