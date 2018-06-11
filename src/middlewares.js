@@ -19,6 +19,9 @@ const allowCrossDomain = (req, res, next) => {
 };
 
 const checkAuthentication = (req, res, next) => {
+    //TODO: Temporary skip authentication
+    next();
+    return
 
     // check header or url parameters or post parameters for token
     const token = req.headers['x-access-token'];
