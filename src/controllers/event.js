@@ -20,7 +20,7 @@ const create = (req, res) => {
 
 const list  = (req, res) => {
     EventModel.find({}).exec()
-        .then(spotPlaces => res.status(200).json(events))
+        .then(events => res.status(200).json(events))
         .catch(error => res.status(500).json({
             error: 'Internal server error',
             message: error.message
