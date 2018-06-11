@@ -7,7 +7,11 @@ const EventModel  = require('../model').Event;
 const list  = (req, res) => {
     EventModel.find({}).exec()
         .then(function (sportPlaces) {
-            let activities = [];
+            
+            //Default activities
+            let activities = ["Running", "Hiking"];
+
+            //Add activites used in events
             for (let sportPlace of sportPlaces) {
                 console.log(sportPlace)
                 //only if activity exists and is not contained in list yet
