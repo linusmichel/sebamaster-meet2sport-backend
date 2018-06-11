@@ -7,12 +7,12 @@ const Schema = mongoose.Schema;
 const UserSchema  = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     }
 });
 
@@ -94,44 +94,7 @@ const EventSchema  = new mongoose.Schema({
 EventSchema.set('versionKey', false);
 EventSchema.set('timestamps', true);
 
-
-
-
-
-
-
-// Define the movie schema
-const MovieSchema  = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    synopsis: String,
-    runtime: Number,
-    mpaa_rating: String,
-    year: {
-        type: Number,
-        required: true
-    },
-    posters: {
-            thumbnail: String,
-            profile: String,
-            detailed: String,
-            original: String
-        }
-});
-
-MovieSchema.set('versionKey', false);
-MovieSchema.set('timestamps', true);
-
-
-
-
-
 // Export the models
 module.exports.User = mongoose.model('User', UserSchema);
 module.exports.SportPlace = mongoose.model('SportPlace', SportPlaceSchema);
 module.exports.Event = mongoose.model('Event', EventSchema);
-
-
-module.exports.Movie = mongoose.model('Movie', MovieSchema);
