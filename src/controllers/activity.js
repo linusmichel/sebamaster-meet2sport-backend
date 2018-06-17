@@ -9,7 +9,7 @@ const list  = (req, res) => {
         .then(function (sportPlaces) {
             
             //Default activities
-            let activities = ["Running", "Hiking"];
+            let activities = ["Football", "Volleyball", "Running", "Hiking"];
 
             //Add activites used in events
             for (let sportPlace of sportPlaces) {
