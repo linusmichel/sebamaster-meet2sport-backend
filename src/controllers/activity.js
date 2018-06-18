@@ -19,7 +19,6 @@ const list  = (req, res) => {
                     activities.push(sportPlace.activity)
                 }
             }
-            console.log(activities)
             res.status(200).json(activities)
         })
         .catch(error => res.status(500).json({

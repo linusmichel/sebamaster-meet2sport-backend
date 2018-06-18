@@ -50,11 +50,11 @@ const parseQueryParameters = (req, res, next) => {
         switch(key) {
             case 'start':
                 //greater than or equal
-                parsedQuery[key] = {$gte: req.query[key]};
+                parsedQuery[key] = {$gte: req.query[key].replace("T", " ")};
                 break;
             case 'end':
                 //less than or equal
-                parsedQuery[key] = {$lte: req.query[key]};
+                parsedQuery[key] = {$lte: req.query[key].replace("T", " ")};
                 break;
             default:
                 parsedQuery[key] = req.query[key];
