@@ -29,6 +29,9 @@ const SportPlaceSchema  = new mongoose.Schema({
     description: {
         type: String,
     },
+    openingHours: {
+        type: String
+    },
     coordinates: {
         longitude: {
             type: Number,
