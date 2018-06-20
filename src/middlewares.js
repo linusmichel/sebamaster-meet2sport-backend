@@ -1,7 +1,7 @@
 "use strict";
 
 const jwt    = require('jsonwebtoken');
-
+const mongoose = require('mongoose');
 const config = require ('./config');
 
 const allowCrossDomain = (req, res, next) => {
@@ -55,6 +55,12 @@ const parseQueryParameters = (req, res, next) => {
             case 'end':
                 //less than or equal
                 parsedQuery[key] = {$lte: req.query[key].replace("T", " ")};
+                break;
+            case 'noparticipant':
+                parsedQuery['participants'] = { $not: {$elemMatch : { $eq : mongoose.Types.ObjectId(req.query[key]) }}};
+                break;
+            case 'participant':
+                parsedQuery['participants'] = { $elemMatch : { $eq : mongoose.Types.ObjectId(req.query[key]) }};
                 break;
             default:
                 parsedQuery[key] = req.query[key];
