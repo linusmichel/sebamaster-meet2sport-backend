@@ -32,14 +32,12 @@ const SportPlaceSchema  = new mongoose.Schema({
     openingHours: {
         type: String
     },
-    coordinates: {
-        longitude: {
-            type: Number,
-            required: true
-        },
-        latitude: {
-            type: Number,
-            required: true
+    loc : {
+        type : {type : String,
+            required : true},
+        coordinates: {
+            type : [Number],
+            required : true
         }
     },
     activities: {
