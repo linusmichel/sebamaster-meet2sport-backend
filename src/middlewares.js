@@ -45,7 +45,7 @@ const checkAuthentication = (req, res, next) => {
 };
 
 const parseQueryParameters = (req, res, next) => {
-    var parsedQuery = {}
+    var parsedQuery = {};
     for (let key in req.query) {
         switch(key) {
             case 'start':
@@ -62,6 +62,25 @@ const parseQueryParameters = (req, res, next) => {
             case 'participant':
                 parsedQuery['participants'] = { $elemMatch : { $eq : mongoose.Types.ObjectId(req.query[key]) }};
                 break;
+            case 'location':
+                // lng,lat,rad
+                let split = req.query[key].split(',');
+                if(split.length !== 3){
+                    break;
+                }
+                let lng = parseFloat(split[0]);
+                let lat = parseFloat(split[1]);
+                let rad = parseFloat(split[2]);
+                if(lng === undefined || lat === undefined || rad === undefined){
+                    break;
+                }
+                // Radius in km gets divided by radius of earth (6378.137 km)
+                rad = rad / 6378.137;
+                parsedQuery['loc'] = { $geoWithin :
+                                { $centerSphere :
+                                        [ [ lng , lat ] , rad ]
+                                } };
+                break;
             default:
                 parsedQuery[key] = req.query[key];
         }
@@ -69,7 +88,6 @@ const parseQueryParameters = (req, res, next) => {
 
     //console.log(req.query);
     //console.log(parsedQuery);
-
     req.parsedQuery = parsedQuery;
     next();
 }

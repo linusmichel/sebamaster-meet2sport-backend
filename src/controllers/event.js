@@ -4,7 +4,7 @@ const config     = require('../config');
 const EventModel  = require('../model').Event;
 const UserModel  = require('../model').User;
 const SportPlaceModel  = require('../model').SportPlace;
-const async = require('async');
+const mongoose = require('mongoose');
 
 
 
@@ -22,6 +22,26 @@ const create = (req, res) => {
         }));
 };
 
+const resolveLocation = (req, res, next) => {
+    if(req.parsedQuery.loc){
+        SportPlaceModel.find({ loc : req.parsedQuery['loc']}).exec()
+            .then(sportplaces => {
+                let ids = sportplaces.map(function(sp) { return mongoose.Types.ObjectId(sp._id); });
+                req.parsedQuery['loc'] = undefined;
+                req.parsedQuery['sportPlace'] = {
+                    $in : ids
+                };
+                next();
+            })
+            .catch(error => res.status(500).json({
+                error: 'Internal server error',
+                message: error.message
+            }));
+    } else {
+        next();
+    }
+};
+
 const list  = (req, res) => {
     EventModel.find(req.parsedQuery).exec()
         .then(events => res.status(200).json(events))
@@ -33,13 +53,13 @@ const list  = (req, res) => {
 
 const listResolved  = (req, res) => {
     EventModel.find(req.parsedQuery).exec()
-        .then((events) => {
-            resolveEvents(events).then((resolvedEvents) => {res.status(200).json(resolvedEvents)});
-        })
-        .catch(error => res.status(500).json({
-            error: 'Internal server error',
-            message: error.message
-        }));
+            .then((events) => {
+                resolveEvents(events).then((resolvedEvents) => {res.status(200).json(resolvedEvents)});
+            })
+            .catch(error => res.status(500).json({
+                error: 'Internal server error',
+                message: error.message
+            }));
 };
 
 async function resolveEvents(events){
@@ -87,8 +107,6 @@ const joinEvent  = (req, res) => {
     let eventID = req.params.id;
     let participant = req.body.participant;
 
-    console.log("Event: " + eventID + ", Participant: " + participant);
-
     EventModel.findById(eventID).exec()
         .then((event) => new Promise(function (resolve,reject) {
             if (event.participants.indexOf(participant) > -1) {
@@ -124,5 +142,6 @@ module.exports = {
     create,
     list,
     listResolved,
+    resolveLocation,
     joinEvent
 };
