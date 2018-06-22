@@ -1,7 +1,7 @@
 "use strict";
 
 const jwt    = require('jsonwebtoken');
-
+const mongoose = require('mongoose');
 const config = require ('./config');
 
 const allowCrossDomain = (req, res, next) => {
@@ -45,16 +45,41 @@ const checkAuthentication = (req, res, next) => {
 };
 
 const parseQueryParameters = (req, res, next) => {
-    var parsedQuery = {}
+    var parsedQuery = {};
     for (let key in req.query) {
         switch(key) {
             case 'start':
                 //greater than or equal
-                parsedQuery[key] = {$gte: req.query[key]};
+                parsedQuery[key] = {$gte: req.query[key].replace("T", " ")};
                 break;
             case 'end':
                 //less than or equal
-                parsedQuery[key] = {$lte: req.query[key]};
+                parsedQuery[key] = {$lte: req.query[key].replace("T", " ")};
+                break;
+            case 'noparticipant':
+                parsedQuery['participants'] = { $not: {$elemMatch : { $eq : mongoose.Types.ObjectId(req.query[key]) }}};
+                break;
+            case 'participant':
+                parsedQuery['participants'] = { $elemMatch : { $eq : mongoose.Types.ObjectId(req.query[key]) }};
+                break;
+            case 'location':
+                // lng,lat,rad
+                let split = req.query[key].split(',');
+                if(split.length !== 3){
+                    break;
+                }
+                let lng = parseFloat(split[0]);
+                let lat = parseFloat(split[1]);
+                let rad = parseFloat(split[2]);
+                if(lng === undefined || lat === undefined || rad === undefined){
+                    break;
+                }
+                // Radius in km gets divided by radius of earth (6378.137 km)
+                rad = rad / 6378.137;
+                parsedQuery['loc'] = { $geoWithin :
+                                { $centerSphere :
+                                        [ [ lng , lat ] , rad ]
+                                } };
                 break;
             default:
                 parsedQuery[key] = req.query[key];
@@ -63,7 +88,6 @@ const parseQueryParameters = (req, res, next) => {
 
     //console.log(req.query);
     //console.log(parsedQuery);
-
     req.parsedQuery = parsedQuery;
     next();
 }

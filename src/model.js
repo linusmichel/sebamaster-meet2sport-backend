@@ -33,8 +33,9 @@ const SportPlaceSchema  = new mongoose.Schema({
         type: String
     },
     loc : {
-        type : {type : String,
-            required : true},
+        'type' : {type: String,
+            enum: "Point",
+            default: "Point"},
         coordinates: {
             type : [Number],
             required : true
