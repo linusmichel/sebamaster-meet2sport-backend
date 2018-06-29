@@ -19,6 +19,18 @@ const UserSchema  = new mongoose.Schema({
 UserSchema.set('versionKey', false);
 
 
+// Define the activity schema
+const ActivitySchema  = new mongoose.Schema({
+    name: {
+        type: String,
+        unique: true,
+        required: true
+    }
+});
+
+ActivitySchema.set('versionKey', false);
+ActivitySchema.set('timestamps', true);
+
 // Define the sport place schema
 const SportPlaceSchema  = new mongoose.Schema({
     name: {
@@ -98,5 +110,6 @@ EventSchema.set('timestamps', true);
 
 // Export the models
 module.exports.User = mongoose.model('User', UserSchema);
+module.exports.Activity = mongoose.model('Activity', ActivitySchema);
 module.exports.SportPlace = mongoose.model('SportPlace', SportPlaceSchema);
 module.exports.Event = mongoose.model('Event', EventSchema);
