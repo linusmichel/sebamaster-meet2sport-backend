@@ -1,25 +1,17 @@
 "use strict";
 
 const config     = require('../config');
-const EventModel  = require('../model').Event;
+const ActivityModel  = require('../model').Activity;
 
 
 const list  = (req, res) => {
-    EventModel.find({}).exec()
-        .then(function (sportPlaces) {
-            
-            //Default activities
-            let activities = ["Football", "Volleyball", "Running", "Hiking"];
-
-            //Add activites used in events
-            for (let sportPlace of sportPlaces) {
-                console.log(sportPlace)
-                //only if activity exists and is not contained in list yet
-                if (sportPlace.activity && !(activities.includes(sportPlace.activity))) {
-                    activities.push(sportPlace.activity)
-                }
+    ActivityModel.find(req.query).exec()
+        .then(activities => {
+            let activitiesList = [];
+            for (let activity of activities) {
+                activitiesList.push(activity.name);
             }
-            res.status(200).json(activities)
+            res.status(200).json(activitiesList);
         })
         .catch(error => res.status(500).json({
             error: 'Internal server error',
