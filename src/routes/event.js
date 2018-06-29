@@ -10,5 +10,6 @@ router.get('/', middlewares.checkAuthentication, middlewares.parseQueryParameter
 router.get('/resolved', middlewares.checkAuthentication, middlewares.parseQueryParameters, EventController.resolveLocation, EventController.listResolved);
 router.post('/', middlewares.checkAuthentication , EventController.create);
 router.put('/join/:id', middlewares.checkAuthentication , EventController.joinEvent);
+router.put('/leave/:id', middlewares.checkAuthentication , EventController.leaveEvent);
 
 module.exports = router;
