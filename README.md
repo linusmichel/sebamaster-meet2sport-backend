@@ -18,7 +18,7 @@ This requires an Internet connection. No further adjustments needed.
 
 ### Local database
 
-You have to adjust `mongoURI` in `src/config.js`. A tutorial how to set up the local databse can be found [here](https://github.com/sebischair/sebamaster-movie-backend).
+You have to adjust `mongoURI` in `src/config.js`. A tutorial how to set up the local database can be found [here](https://github.com/sebischair/sebamaster-movie-backend).
 
 Dumps of an exemplary database can be found [here](linusmichel.ddns.net/mongodb).
 
