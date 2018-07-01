@@ -138,10 +138,47 @@ const joinEvent  = (req, res) => {
         });
 };
 
+const leaveEvent = (req, res) => {
+    if (Object.keys(req.body).length === 0) return res.status(400).json({
+        error: 'Bad Request',
+        message: 'The request body is empty'
+    });
+    if (!req.body.participant) return res.status(400).json({
+        error: 'Bad Request',
+        message: 'Need to specify participant in request body'
+    });
+
+    let eventID = req.params.id;
+    let participant = req.body.participant;
+
+    EventModel.findById(eventID).exec()
+        .then((event) => new Promise(function (resolve,reject) {
+            if (event.participants.indexOf(participant) === -1) {
+                reject({
+                    status : 400,
+                    error: 'Leave event failed',
+                    message: 'User is not participating'
+                });
+            }
+
+            event.participants.splice(event.participants.indexOf(participant), 1);
+            resolve(event);
+        })).then(event => EventModel.update({ _id : event._id}, { $set : {participants : event.participants}}).exec())
+        .then(event => res.status(200).json(event))
+        .catch(error => {
+            console.log(error);
+            res.status(error.status ? error.status : 500).json({
+                error: error.error ? error.error : "Internal Server Error",
+                message: error.message
+            });
+        });
+};
+
 module.exports = {
     create,
     list,
     listResolved,
     resolveLocation,
-    joinEvent
+    joinEvent,
+    leaveEvent
 };
